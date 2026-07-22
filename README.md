@@ -4,11 +4,11 @@ Enterprise Governance, Risk & Compliance (GRC) Management System built using Cor
 
 ## Features
 
-- Add Employee
+- Add model.Employee
 - Display Employees
-- Search Employee
-- Update Employee
-- Delete Employee
+- Search model.Employee
+- Update model.Employee
+- Delete model.Employee
 
 ## Concepts Used
 

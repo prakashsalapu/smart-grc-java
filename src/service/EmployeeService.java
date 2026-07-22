@@ -1,3 +1,6 @@
+package service;
+import model.Employee;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -54,7 +57,7 @@ public class EmployeeService {
 
     // Display all Employees
     public void displayAllEmployees(){
-        if(employees.size() == 0){
+        if(employees.isEmpty()){
             System.out.println("No employees found!");
         }
         for(Employee employee : employees){

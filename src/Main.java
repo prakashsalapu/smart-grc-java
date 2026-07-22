@@ -1,3 +1,5 @@
+import service.EmployeeService;
+
 import java.util.Scanner;
 
 public class Main {
@@ -23,21 +25,21 @@ public class Main {
                     break;
 
                 case 3:
-                    System.out.print("\n Enter Employee ID to search: ");
+                    System.out.print("\n Enter model.Employee ID to search: ");
                     int searchID = sc.nextInt();
                     sc.nextLine();
                     employeeService.searchEmployee(searchID);
                     break;
 
                 case 4:
-                    System.out.print("\n Enter Employee ID to Update: ");
+                    System.out.print("\n Enter model.Employee ID to Update: ");
                     int updateID = sc.nextInt();
                     sc.nextLine();
                     employeeService.updateEmployee(updateID, sc);
                     break;
 
                 case 5:
-                    System.out.print("\n Enter Employee ID to Delete: ");
+                    System.out.print("\n Enter model.Employee ID to Delete: ");
                     int deleteID = sc.nextInt();
                     sc.nextLine();
                     employeeService.deleteEmployee(deleteID);
