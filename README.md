@@ -1,29 +1,44 @@
 # SmartGRC Java
 
-Enterprise Risk & Compliance Management System built using Java.
+Enterprise Governance, Risk & Compliance (GRC) Management System built using Core Java.
 
-## Current Features
+## Features
 
-- Employee Management
 - Add Employee
 - Display Employees
 - Search Employee
 - Update Employee
 - Delete Employee
 
+## Concepts Used
+
+- Object-Oriented Programming
+- Encapsulation
+- Constructors
+- Collections (ArrayList)
+- CRUD Operations
+- Method Overriding
+- Validation
+- Clean Code Principles
+
 ## Tech Stack
 
 - Java
-- OOP
-- Collections
-- DSA
+- IntelliJ IDEA
+- Git
+- GitHub
 
-## Upcoming
+## Upcoming Features
 
-- Inheritance
-- Interfaces
 - Exception Handling
+- File Handling
+- Packages
 - JDBC
 - Oracle SQL
 - PL/SQL
 - Spring Boot
+- REST APIs
+
+## Learning Objectives
+
+This project is being developed incrementally to learn Java backend development by applying OOP concepts in a real-world enterprise application.
