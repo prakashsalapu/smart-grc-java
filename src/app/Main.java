@@ -1,5 +1,6 @@
+package app;
 import service.EmployeeService;
-
+import static util.MenuUtil.displayMenu;
 import java.util.Scanner;
 
 public class Main {
@@ -10,11 +11,18 @@ public class Main {
 
         boolean running = true;
         while(running){
-
-            employeeService.displayMenu();
+            displayMenu();
             System.out.print("\nEnter Choice: ");
+
+            if(!sc.hasNextInt()){
+                System.out.println("Please enter a valid number.");
+                sc.nextLine();
+                continue;
+            }
+
             int menuOption = sc.nextInt();
             sc.nextLine();
+
             switch (menuOption){
                 case 1:
                     employeeService.addEmployee(sc);
@@ -46,6 +54,9 @@ public class Main {
                     break;
 
                 case 6:
+                    employeeService.totalEmployees();
+                    break;
+                case 7:
                    running = false;
                    System.out.println("""
                            Thank you for using SmartGRC.
@@ -54,7 +65,7 @@ public class Main {
                    break;
 
                 default:
-                    System.out.println("Invalid Input");
+                    System.out.println("Invalid Input, Please enter valid number!");
 
             }
 

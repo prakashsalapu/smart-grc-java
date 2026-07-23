@@ -13,7 +13,7 @@ public class Employee {
     private String status;
 
     // constructor
-    public Employee(int empID,  String empName, String email, String department, String designation, double salary, String status){
+    public Employee(int empID, String empName, String email, String department, String designation, double salary, String status){
 
         this.empID = empID;
         setEmpName(empName);
