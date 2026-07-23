@@ -93,7 +93,7 @@ public class Employee {
     // Override method to display Object fields
     @Override
     public String toString(){
-        return "\nmodel.Employee ID: " + empID + "\nName: " + empName + "\nEmail: " + email + "\nDepartment: " + department + "\nDesignation: " + designation +
+        return "\nEmployee ID: " + empID + "\nName: " + empName + "\nEmail: " + email + "\nDepartment: " + department + "\nDesignation: " + designation +
                 "\nSalary: " + salary + "\nStatus: " + status;
     }
 

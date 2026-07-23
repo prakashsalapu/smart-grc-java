@@ -46,7 +46,8 @@ public class EmployeeService {
             // Pass values to constructor (or setters)
             try {
                 Employee employee = new Employee(empID, name, email, department, designation, salary, status);
-                System.out.println("Employee added successfully!");
+                employees.add(employee);
+                System.out.println("\nEmployee added successfully!");
             } catch (IllegalArgumentException e) {
                 System.out.println("Error adding employee: " + e.getMessage());
             }
@@ -57,9 +58,12 @@ public class EmployeeService {
 
     // Display all Employees
     public void displayAllEmployees(){
+
         if(employees.isEmpty()){
             System.out.println("No employees found!");
+            return;
         }
+        System.out.println("\n========= Employees Data =========");
         for(Employee employee : employees){
             System.out.println(employee);
         }
@@ -88,13 +92,14 @@ public class EmployeeService {
                 found = true;
 
                 System.out.println("\n========= Update Menu =========");
-                System.out.println("1. Name\n" +
-                        "2. Email\n" +
-                        "3. Department\n" +
-                        "4. Designation\n" +
-                        "5. Salary\n" +
-                        "6. Status\n" +
-                        "===============================");
+                System.out.println("""
+                        1. Name
+                        2. Email
+                        3. Department
+                        4. Designation
+                        5. Salary
+                        6. Status
+                        ===============================""");
                 System.out.print("\nEnter Choice: ");
                 int option = sc.nextInt();
                 sc.nextLine();
@@ -170,7 +175,7 @@ public class EmployeeService {
 
     // Display MENU
     public void displayMenu(){
-        System.out.println("\n========= SmartGRC =========");
+        System.out.println("\n========= Smart-GRC =========");
         System.out.println("1. Add Employee");
         System.out.println("2. Display Employees");
         System.out.println("3. Search Employee");
