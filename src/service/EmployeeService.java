@@ -1,5 +1,6 @@
 package service;
 import model.Employee;
+import repository.DepartmentRepository;
 import util.ValidationUtil;
 
 import repository.EmployeeRepository;
@@ -9,7 +10,16 @@ import java.util.Scanner;
 
 public class EmployeeService {
 
-    private EmployeeRepository repository =  new EmployeeRepository();
+//    private EmployeeRepository repository =  new EmployeeRepository();
+    private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
+
+    public EmployeeService(EmployeeRepository employeeRepository,
+                           DepartmentRepository departmentRepository) {
+
+        this.employeeRepository = employeeRepository;
+        this.departmentRepository = departmentRepository;
+    }
 
     // Add Employees to Database
     public void addEmployee(Scanner sc) {
