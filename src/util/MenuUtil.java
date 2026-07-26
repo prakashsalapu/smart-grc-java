@@ -2,16 +2,33 @@ package util;
 
 public class MenuUtil {
 
-    // Display MENU
-    public static void displayMenu(){
-        System.out.println("\n========= Smart-GRC =========");
-        System.out.println("1. Add Employee");
-        System.out.println("2. View Employees");
-        System.out.println("3. Search Employee");
-        System.out.println("4. Update Employee");
-        System.out.println("5. Delete Employee");
-        System.out.println("6. Total Employees");
-        System.out.println("7. Exit");
-        System.out.println("=============================");
+    public static void displayMenu() {
+
+        System.out.println("""
+            
+            ==================================================
+                    SMART GRC MANAGEMENT SYSTEM
+            ==================================================
+            
+            EMPLOYEE MANAGEMENT
+            -------------------
+            1. Add Employee
+            2. Display All Employees
+            3. Search Employee
+            4. Update Employee
+            5. Delete Employee
+            6. Total Employees
+            
+            DEPARTMENT MANAGEMENT
+            ---------------------
+            7. Display Departments
+            8. Add Department
+            9. Update Department
+            10. Delete Department
+            
+            --------------------------------------------------
+            0. Exit
+            ==================================================
+            """);
     }
 }

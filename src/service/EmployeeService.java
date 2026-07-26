@@ -1,36 +1,37 @@
 package service;
+
+import model.Department;
 import model.Employee;
 import repository.DepartmentRepository;
+import repository.EmployeeRepository;
 import util.ValidationUtil;
 
-import repository.EmployeeRepository;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
 public class EmployeeService {
 
-//    private EmployeeRepository repository =  new EmployeeRepository();
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
 
     public EmployeeService(EmployeeRepository employeeRepository,
                            DepartmentRepository departmentRepository) {
-
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
     }
 
-    // Add Employees to Database
+    // Add Employees
     public void addEmployee(Scanner sc) {
+
         System.out.print("Enter number of employees to add: ");
 
         int n;
+
         try {
             n = sc.nextInt();
             sc.nextLine();
         } catch (InputMismatchException e) {
-            System.out.println("Invalid number format! Returning to main menu.");
+            System.out.println("Invalid number.");
             sc.nextLine();
             return;
         }
@@ -38,47 +39,64 @@ public class EmployeeService {
         int addedCount = 0;
 
         for (int i = 0; i < n; i++) {
-            System.out.println("\nEnter Details for Employee " + (i + 1));
 
             try {
+
+                System.out.println("\n========== Employee " + (i + 1) + " ==========");
+
                 System.out.print("Employee ID: ");
                 int empID = sc.nextInt();
                 sc.nextLine();
-                if(!ValidationUtil.isValidId(empID)){
-                    System.out.println("Invalid Employee Id.");
+
+                if (!ValidationUtil.isValidId(empID)) {
+                    System.out.println("Invalid Employee ID.");
                     continue;
                 }
 
-                /* check whether the ID already exists or not. */
-                if (repository.existsById(empID)) {
-                    System.out.println("Error: Employee ID " + empID + " already exists. Skipping...");
+                if (employeeRepository.existsById(empID)) {
+                    System.out.println("Employee ID already exists.");
                     continue;
                 }
 
                 System.out.print("Name: ");
                 String name = sc.nextLine();
-                if(!ValidationUtil.isValidName(name)){
-                    System.out.println("Invalid Employee Name.");
+
+                if (!ValidationUtil.isValidName(name)) {
+                    System.out.println("Invalid Name.");
                     continue;
                 }
 
                 System.out.print("Email: ");
                 String email = sc.nextLine();
-                if(!ValidationUtil.isValidEmail(email)){
+
+                if (!ValidationUtil.isValidEmail(email)) {
                     System.out.println("Invalid Email.");
                     continue;
                 }
 
-                System.out.print("Department: ");
-                String department = sc.nextLine();
-                if(!ValidationUtil.isValidDepartment(department)){
+                // Department Selection
+                System.out.println("\nAvailable Departments:");
+
+                for (Department dept : departmentRepository.findAll()) {
+                    System.out.println(dept.getId() + ". " + dept.getName());
+                }
+
+                System.out.print("Department ID: ");
+
+                int deptId = sc.nextInt();
+                sc.nextLine();
+
+                Department department = departmentRepository.findById(deptId);
+
+                if (department == null) {
                     System.out.println("Invalid Department.");
                     continue;
                 }
 
                 System.out.print("Designation: ");
                 String designation = sc.nextLine();
-                if(!ValidationUtil.isValidDesignation(designation)){
+
+                if (!ValidationUtil.isValidDesignation(designation)) {
                     System.out.println("Invalid Designation.");
                     continue;
                 }
@@ -86,167 +104,202 @@ public class EmployeeService {
                 System.out.print("Salary: ");
                 double salary = sc.nextDouble();
                 sc.nextLine();
-                if(!ValidationUtil.isValidSalary(salary)){
+
+                if (!ValidationUtil.isValidSalary(salary)) {
                     System.out.println("Invalid Salary.");
                     continue;
                 }
 
                 System.out.print("Status (ACTIVE/INACTIVE): ");
-                String status = sc.nextLine();
+                String status = sc.nextLine().toUpperCase();
+
                 if (!ValidationUtil.isValidStatus(status)) {
-                    System.out.println("Invalid Status! Must be 'ACTIVE' or 'INACTIVE'. Skipping this entry...");
+                    System.out.println("Invalid Status.");
                     continue;
                 }
 
+                Employee employee = new Employee(
+                        empID,
+                        name,
+                        email,
+                        department.getName(),
+                        designation,
+                        salary,
+                        status
+                );
 
-                Employee employee = new Employee(empID, name, email, department, designation, salary, status);
-                repository.save(employee);
+                employeeRepository.save(employee);
+
                 addedCount++;
-                System.out.println("Employee (ID: " + empID + ") added successfully!");
+
+                System.out.println("Employee added successfully.");
 
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input type entered! Skipping this entry.");
+                System.out.println("Invalid input.");
                 sc.nextLine();
-            } catch (IllegalArgumentException e) {
-                System.out.println("Error adding employee: " + e.getMessage());
             }
         }
 
-        System.out.println("\nTotal " + addedCount + " employee(s) added successfully.");
+        System.out.println("\nTotal Employees Added: " + addedCount);
     }
 
-    // Display all Employees
-    public void displayAllEmployees(){
+    // Display All Employees
+    public void displayAllEmployees() {
 
-        if(repository.isEmpty()){
-            System.out.println("No employees found!");
+        if (employeeRepository.isEmpty()) {
+            System.out.println("No employees found.");
             return;
         }
-        System.out.println("\n========= Employees Data =========");
-        for(Employee employee : repository.findAll().values()){
+
+        System.out.println("\n========== Employees ==========");
+
+        for (Employee employee : employeeRepository.findAll().values()) {
             System.out.println(employee);
         }
     }
 
     // Search Employee
-    public void searchEmployee(int searchId){
-       Employee employee = repository.findById(searchId);
+    public void searchEmployee(int searchId) {
 
-       if(employee != null){
-           System.out.println(employee);
-       }else{
-           System.out.println("\nEmployee details not found!");
-       }
+        Employee employee = employeeRepository.findById(searchId);
+
+        if (employee != null) {
+            System.out.println(employee);
+        } else {
+            System.out.println("Employee not found.");
+        }
     }
 
-    // Update Employee Details
-    public void updateEmployee(int empID, Scanner sc){
+    // Update Employee
+    public void updateEmployee(int empID, Scanner sc) {
 
-            Employee employee = repository.findById(empID);
-            if(employee == null) {
-                System.out.println("\nEmployee details not found!");
-                return;
-            }
+        Employee employee = employeeRepository.findById(empID);
 
-            System.out.println("\n========= Update Menu =========");
-            System.out.println("""
-                    1. Name
-                    2. Email
-                    3. Department
-                    4. Designation
-                    5. Salary
-                    6. Status
-                    ===============================""");
-            System.out.print("\nEnter Choice: ");
-
-            int option = sc.nextInt();
-            sc.nextLine();
-
-            switch (option){
-                case 1:
-                    System.out.print("Enter new Name: ");
-                    String newName = sc.nextLine();
-                    if(!ValidationUtil.isValidName(newName)){
-                        System.out.println("Invalid Employee Name.");
-                    }
-                    employee.setEmpName(newName);
-                    System.out.println("Name updated successfully.");
-                    break;
-
-                case 2:
-                    System.out.print("Enter new Email (hellox@example.com): ");
-                    String newEmail = sc.nextLine();
-                    if(!ValidationUtil.isValidEmail(newEmail)){
-                        System.out.println("Invalid Email.");
-                    }
-                    employee.setEmail(newEmail);
-                    System.out.println("Email updated successfully.");
-                    break;
-
-                case 3:
-                    System.out.print("Enter new Department: ");
-                    String newDept = sc.nextLine();
-                    if(!ValidationUtil.isValidDepartment(newDept)){
-                        System.out.println("Invalid Department.");
-                    }
-                    employee.setDepartment(newDept);
-                    System.out.println("Department updated successfully.");
-                    break;
-
-                case 4:
-                    System.out.print("Enter new Designation: ");
-                    String newDesignation = sc.nextLine();
-                    if(!ValidationUtil.isValidDesignation(newDesignation)){
-                        System.out.println("Invalid Designation.");
-                    }
-                    employee.setDesignation(newDesignation);
-                    System.out.println("Designation updated successfully.");
-                    break;
-
-                case 5:
-                    System.out.print("Enter new Salary: ");
-                    double newSalary = sc.nextDouble();
-                    sc.nextLine();
-                    if(!ValidationUtil.isValidSalary(newSalary)){
-                        System.out.println("Invalid Salary.");
-                    }
-                    employee.setSalary(newSalary);
-                    System.out.println("Salary updated successfully.");
-                    break;
-
-                case 6:
-                    System.out.print("Enter new Status (ACTIVE/INACTIVE): ");
-                    String newStatus = sc.nextLine();
-                    if (!ValidationUtil.isValidStatus(newStatus)) {
-                        System.out.println("Invalid Status! Must be 'ACTIVE' or 'INACTIVE'. Skipping this entry...");
-                    }
-                    employee.setStatus(newStatus);
-                    System.out.println("Status updated successfully.");
-                    break;
-
-                default:
-                    System.out.println("Invalid Input");
-
-            }
+        if (employee == null) {
+            System.out.println("Employee not found.");
+            return;
         }
+
+        System.out.println("""
+                
+                ======== Update Menu ========
+                1. Name
+                2. Email
+                3. Department
+                4. Designation
+                5. Salary
+                6. Status
+                """);
+
+        System.out.print("Enter Choice: ");
+
+        int option = sc.nextInt();
+        sc.nextLine();
+
+        switch (option) {
+
+            case 1 -> {
+                System.out.print("New Name: ");
+                String name = sc.nextLine();
+
+                if (ValidationUtil.isValidName(name)) {
+                    employee.setEmpName(name);
+                    System.out.println("Updated.");
+                } else {
+                    System.out.println("Invalid Name.");
+                }
+            }
+
+            case 2 -> {
+                System.out.print("New Email: ");
+                String email = sc.nextLine();
+
+                if (ValidationUtil.isValidEmail(email)) {
+                    employee.setEmail(email);
+                    System.out.println("Updated.");
+                } else {
+                    System.out.println("Invalid Email.");
+                }
+            }
+
+            case 3 -> {
+
+                System.out.println("\nAvailable Departments:");
+
+                for (Department dept : departmentRepository.findAll()) {
+                    System.out.println(dept.getId() + ". " + dept.getName());
+                }
+
+                System.out.print("Department ID: ");
+
+                int deptId = sc.nextInt();
+                sc.nextLine();
+
+                Department department = departmentRepository.findById(deptId);
+
+                if (department != null) {
+                    employee.setDepartment(department.getName());
+                    System.out.println("Updated.");
+                } else {
+                    System.out.println("Invalid Department.");
+                }
+            }
+
+            case 4 -> {
+                System.out.print("New Designation: ");
+                String designation = sc.nextLine();
+
+                if (ValidationUtil.isValidDesignation(designation)) {
+                    employee.setDesignation(designation);
+                    System.out.println("Updated.");
+                } else {
+                    System.out.println("Invalid Designation.");
+                }
+            }
+
+            case 5 -> {
+                System.out.print("New Salary: ");
+                double salary = sc.nextDouble();
+                sc.nextLine();
+
+                if (ValidationUtil.isValidSalary(salary)) {
+                    employee.setSalary(salary);
+                    System.out.println("Updated.");
+                } else {
+                    System.out.println("Invalid Salary.");
+                }
+            }
+
+            case 6 -> {
+                System.out.print("New Status (ACTIVE/INACTIVE): ");
+                String status = sc.nextLine().toUpperCase();
+
+                if (ValidationUtil.isValidStatus(status)) {
+                    employee.setStatus(status);
+                    System.out.println("Updated.");
+                } else {
+                    System.out.println("Invalid Status.");
+                }
+            }
+
+            default -> System.out.println("Invalid Choice.");
+        }
+    }
 
     // Delete Employee
-    public void deleteEmployee(int targetId){
-        Employee removed = repository.deleteById(targetId);
+    public void deleteEmployee(int targetId) {
 
-        if(removed != null){
-            System.out.println("\nEmployee with ID " + targetId + " was removed.");
-        }else {
-            System.out.println("\nEmployee with ID " + targetId + " not found.");
+        Employee removed = employeeRepository.deleteById(targetId);
+
+        if (removed != null) {
+            System.out.println("Employee deleted successfully.");
+        } else {
+            System.out.println("Employee not found.");
         }
     }
 
-    // Display Toatal Employees
-    public void totalEmployees(){
-        System.out.println("\nTotal Employee(s): " + repository.count());
+    // Total Employees
+    public void totalEmployees() {
+        System.out.println("\nTotal Employees: " + employeeRepository.count());
     }
-
-
 }
-
-

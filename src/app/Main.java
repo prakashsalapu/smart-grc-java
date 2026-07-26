@@ -15,9 +15,11 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
 
+        // Repositories
         EmployeeRepository employeeRepository = new EmployeeRepository();
         DepartmentRepository departmentRepository = new DepartmentRepository();
 
+        // Services
         EmployeeService employeeService =
                 new EmployeeService(employeeRepository, departmentRepository);
 
@@ -30,16 +32,7 @@ public class Main {
 
             displayMenu();
 
-            System.out.print("\nEnter Choice: ");
-
-            if (!sc.hasNextInt()) {
-                System.out.println("❌ Please enter a valid number.");
-                sc.nextLine();
-                continue;
-            }
-
-            int menuOption = sc.nextInt();
-            sc.nextLine();
+            int menuOption = readInt(sc, "\nEnter Choice: ");
 
             switch (menuOption) {
 
@@ -52,23 +45,17 @@ public class Main {
                 case 2 -> employeeService.displayAllEmployees();
 
                 case 3 -> {
-                    System.out.print("Enter Employee ID: ");
-                    int searchID = sc.nextInt();
-                    sc.nextLine();
+                    int searchID = readInt(sc, "Enter Employee ID: ");
                     employeeService.searchEmployee(searchID);
                 }
 
                 case 4 -> {
-                    System.out.print("Enter Employee ID: ");
-                    int updateID = sc.nextInt();
-                    sc.nextLine();
+                    int updateID = readInt(sc, "Enter Employee ID: ");
                     employeeService.updateEmployee(updateID, sc);
                 }
 
                 case 5 -> {
-                    System.out.print("Enter Employee ID: ");
-                    int deleteID = sc.nextInt();
-                    sc.nextLine();
+                    int deleteID = readInt(sc, "Enter Employee ID: ");
                     employeeService.deleteEmployee(deleteID);
                 }
 
@@ -78,9 +65,9 @@ public class Main {
                 // Department Management
                 // ==========================
 
-                case 7 -> departmentService.addDepartment(sc);
+                case 7 -> departmentService.displayDepartments();
 
-                case 8 -> departmentService.displayDepartments();
+                case 8 -> departmentService.addDepartment(sc);
 
                 case 9 -> departmentService.updateDepartment(sc);
 
@@ -92,18 +79,40 @@ public class Main {
 
                 case 0 -> {
                     running = false;
+
                     System.out.println("""
                             
-                            Thank you for using SmartGRC.
-                            
-                            Exiting...
+                            ========================================
+                                 Thank you for using SmartGRC!
+                            ========================================
+                            Application closed successfully.
                             """);
                 }
 
-                default -> System.out.println("❌ Invalid Choice.");
+                default -> System.out.println(" Invalid Choice! Please try again.");
             }
         }
 
         sc.close();
+    }
+
+    /**
+     * Reads a valid integer from the user.
+     */
+    private static int readInt(Scanner sc, String message) {
+
+        while (true) {
+
+            System.out.print(message);
+
+            if (sc.hasNextInt()) {
+                int value = sc.nextInt();
+                sc.nextLine(); // Clear buffer
+                return value;
+            }
+
+            System.out.println(" Invalid input. Please enter a number.");
+            sc.nextLine(); // Discard invalid input
+        }
     }
 }
