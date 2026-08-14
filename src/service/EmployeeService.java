@@ -1,10 +1,13 @@
 package service;
 
+import exception.DuplicateEmployeeException;
+import exception.EmployeeNotFoundException;
 import model.Department;
 import model.Employee;
 import repository.DepartmentRepository;
 import repository.EmployeeRepository;
 import util.ValidationUtil;
+import model.Employee.Status;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -21,7 +24,7 @@ public class EmployeeService {
     }
 
     // Add Employees
-    public void addEmployee(Scanner sc) {
+    public void addEmployee(Scanner sc)  {
 
         System.out.print("Enter number of employees to add: ");
 
@@ -54,8 +57,8 @@ public class EmployeeService {
                 }
 
                 if (employeeRepository.existsById(empID)) {
-                    System.out.println("Employee ID already exists.");
-                    continue;
+                    throw new DuplicateEmployeeException("Employee ID already exists, return to Main..");
+
                 }
 
                 System.out.print("Name: ");
@@ -111,12 +114,15 @@ public class EmployeeService {
                 }
 
                 System.out.print("Status (ACTIVE/INACTIVE): ");
-                String status = sc.nextLine().toUpperCase();
+                String statusInput = sc.nextLine();
 
-                if (!ValidationUtil.isValidStatus(status)) {
+                if (!ValidationUtil.isValidStatus(statusInput)) {
                     System.out.println("Invalid Status.");
                     continue;
                 }
+
+                // Convert valid String to Enum constant
+                Status status = Status.valueOf(statusInput.trim().toUpperCase());
 
                 Employee employee = new Employee(
                         empID,
@@ -137,6 +143,9 @@ public class EmployeeService {
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input.");
                 sc.nextLine();
+            }
+            catch (DuplicateEmployeeException e){
+                System.out.println(e.getMessage());
             }
         }
 
@@ -163,11 +172,16 @@ public class EmployeeService {
 
         Employee employee = employeeRepository.findById(searchId);
 
-        if (employee != null) {
-            System.out.println(employee);
-        } else {
-            System.out.println("Employee not found.");
+        try {
+            if (employee != null) {
+                System.out.println(employee);
+            } else {
+               throw new EmployeeNotFoundException("Employee Not Found, Check Again..");
+            }
+        } catch (EmployeeNotFoundException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     // Update Employee
@@ -271,15 +285,15 @@ public class EmployeeService {
             }
 
             case 6 -> {
-                System.out.print("New Status (ACTIVE/INACTIVE): ");
-                String status = sc.nextLine().toUpperCase();
+                System.out.print("Status (ACTIVE/INACTIVE): ");
+                String statusInput = sc.nextLine();
 
-                if (ValidationUtil.isValidStatus(status)) {
-                    employee.setStatus(status);
-                    System.out.println("Updated.");
-                } else {
+                if (!ValidationUtil.isValidStatus(statusInput)) {
                     System.out.println("Invalid Status.");
                 }
+
+                // Convert valid String to Enum constant
+                Status status = Status.valueOf(statusInput.trim().toUpperCase());
             }
 
             default -> System.out.println("Invalid Choice.");

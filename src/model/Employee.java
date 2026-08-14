@@ -3,6 +3,11 @@ package model;
 
 public class Employee {
 
+    public enum Status{
+        ACTIVE,
+        INACTIVE
+    }
+
     // fields
     private final int empID;
     private String empName;
@@ -10,10 +15,12 @@ public class Employee {
     private String department;
     private String designation;
     private double salary;
-    private String status;
+    private Status status;
+
+
 
     // constructor
-    public Employee(int empID, String empName, String email, String department, String designation, double salary, String status){
+    public Employee(int empID, String empName, String email, String department, String designation, double salary, Status status){
 
         this.empID = empID;
         setEmpName(empName);
@@ -21,7 +28,7 @@ public class Employee {
         setDepartment(department);
         setDesignation(designation);
         setSalary(salary);
-        setStatus(status);
+        this.status = status;
 
     }
 
@@ -80,15 +87,17 @@ public class Employee {
         }
     }
 
-    public String getStatus() {
+    // Getter for Status
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        if("ACTIVE".equals(status) || "INACTIVE".equals(status)){
-            this.status = status;
-        }
+    // Setter for Status
+    public void setStatus(Status status) {
+        this.status = status;
     }
+
+
 
     // Override method to display Object fields
     @Override

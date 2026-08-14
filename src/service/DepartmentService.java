@@ -1,5 +1,7 @@
 package service;
 
+import exception.DepartmentNotFoundException;
+import exception.DuplicateDepartmentException;
 import model.Department;
 import repository.DepartmentRepository;
 import util.ValidationUtil;
@@ -15,59 +17,72 @@ public class DepartmentService {
         this.repository = repository;
     }
 
-    // Display all departments
+
+    // Display Departments
     public void displayDepartments() {
+
         List<Department> departments = repository.findAll();
 
         if (departments.isEmpty()) {
-            System.out.println("No departments available.");
+            System.out.println("No departments found.");
             return;
         }
 
         System.out.println("\n========== Departments ==========");
-        for (Department dept : departments) {
-            System.out.println(dept);
+
+        for (Department department : departments) {
+            System.out.println(department);
         }
     }
 
-    // Select department while adding employee
-    public Department selectDepartment(Scanner sc) {
 
-        List<Department> departments = repository.findAll();
+
+    // Select Department
+    public Department selectDepartment(Scanner sc) {
 
         while (true) {
 
-            System.out.println("\nSelect Department");
+            displayDepartments();
 
-            for (Department dept : departments) {
-                System.out.println(dept.getId() + ". " + dept.getName());
-            }
-
-            System.out.print("Choice : ");
+            System.out.print("\nEnter Department ID: ");
 
             if (!sc.hasNextInt()) {
-                System.out.println("Invalid input.");
+                System.out.println("Invalid input. Please enter a number.");
                 sc.nextLine();
                 continue;
             }
 
-            int choice = sc.nextInt();
+            int departmentId = sc.nextInt();
             sc.nextLine();
 
-            Department department = repository.findById(choice);
+            try {
 
-            if (department != null) {
+                Department department =
+                        repository.findById(departmentId);
+
+                if (department == null) {
+                    throw new DepartmentNotFoundException(
+                            "Department with ID "
+                                    + departmentId
+                                    + " not found."
+                    );
+                }
+
                 return department;
-            }
 
-            System.out.println("Department not found.");
+            } catch (DepartmentNotFoundException e) {
+
+                System.out.println(e.getMessage());
+            }
         }
     }
+
 
     // Add Department
     public void addDepartment(Scanner sc) {
 
-        System.out.print("Department Name : ");
+        System.out.print("Enter Department Name: ");
+
         String name = sc.nextLine().trim();
 
         if (!ValidationUtil.isValidDepartment(name)) {
@@ -75,21 +90,43 @@ public class DepartmentService {
             return;
         }
 
-        Department dept = repository.save(name);
+        try {
 
-        System.out.println("Department Added Successfully.");
-        System.out.println(dept);
+            // Check duplicate department name
+            for (Department department : repository.findAll()) {
+
+                if (department.getName().equalsIgnoreCase(name)) {
+
+                    throw new DuplicateDepartmentException(
+                            "Department '" + name + "' already exists."
+                    );
+                }
+            }
+
+            Department department = repository.save(name);
+
+            System.out.println(
+                    "Department added successfully: "
+                            + department
+            );
+
+        } catch (DuplicateDepartmentException e) {
+
+            System.out.println(e.getMessage());
+        }
     }
 
+
     // Update Department
+
     public void updateDepartment(Scanner sc) {
 
         displayDepartments();
 
-        System.out.print("Enter Department ID : ");
+        System.out.print("\nEnter Department ID to update: ");
 
         if (!sc.hasNextInt()) {
-            System.out.println("Invalid ID.");
+            System.out.println("Invalid Department ID.");
             sc.nextLine();
             return;
         }
@@ -97,30 +134,65 @@ public class DepartmentService {
         int id = sc.nextInt();
         sc.nextLine();
 
-        System.out.print("New Department Name : ");
-        String newName = sc.nextLine().trim();
+        try {
 
-        if (!ValidationUtil.isValidDepartment(newName)) {
-            System.out.println("Invalid Department Name.");
-            return;
-        }
+            Department department = repository.findById(id);
 
-        if (repository.update(id, newName)) {
-            System.out.println("Department Updated Successfully.");
-        } else {
-            System.out.println("Department Not Found.");
+            if (department == null) {
+                throw new DepartmentNotFoundException(
+                        "Department with ID "
+                                + id
+                                + " not found."
+                );
+            }
+
+            System.out.print("Enter new Department Name: ");
+
+            String newName = sc.nextLine().trim();
+
+            if (!ValidationUtil.isValidDepartment(newName)) {
+                System.out.println("Invalid Department Name.");
+                return;
+            }
+
+            // Check duplicate name
+            for (Department existing : repository.findAll()) {
+
+                if (existing.getId() != id &&
+                        existing.getName().equalsIgnoreCase(newName)) {
+
+                    throw new DuplicateDepartmentException(
+                            "Department '" + newName
+                                    + "' already exists."
+                    );
+                }
+            }
+
+            repository.update(id, newName);
+
+            System.out.println(
+                    "Department updated successfully."
+            );
+
+        } catch (DepartmentNotFoundException |
+                 DuplicateDepartmentException e) {
+
+            System.out.println(e.getMessage());
         }
     }
 
+
+
     // Delete Department
+
     public void deleteDepartment(Scanner sc) {
 
         displayDepartments();
 
-        System.out.print("Enter Department ID : ");
+        System.out.print("\nEnter Department ID to delete: ");
 
         if (!sc.hasNextInt()) {
-            System.out.println("Invalid ID.");
+            System.out.println("Invalid Department ID.");
             sc.nextLine();
             return;
         }
@@ -128,10 +200,30 @@ public class DepartmentService {
         int id = sc.nextInt();
         sc.nextLine();
 
-        if (repository.delete(id)) {
-            System.out.println("Department Deleted Successfully.");
-        } else {
-            System.out.println("Department Not Found.");
+        try {
+
+            Department department = repository.findById(id);
+
+            if (department == null) {
+
+                throw new DepartmentNotFoundException(
+                        "Department with ID "
+                                + id
+                                + " not found."
+                );
+            }
+
+            repository.delete(id);
+
+            System.out.println(
+                    "Department '" +
+                            department.getName() +
+                            "' deleted successfully."
+            );
+
+        } catch (DepartmentNotFoundException e) {
+
+            System.out.println(e.getMessage());
         }
     }
 }

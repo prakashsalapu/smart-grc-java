@@ -1,5 +1,7 @@
 package app;
 
+import exception.DuplicateEmployeeException;
+import exception.EmployeeNotFoundException;
 import repository.DepartmentRepository;
 import repository.EmployeeRepository;
 import service.DepartmentService;
@@ -11,7 +13,7 @@ import static util.MenuUtil.displayMenu;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EmployeeNotFoundException, DuplicateEmployeeException {
 
         Scanner sc = new Scanner(System.in);
 

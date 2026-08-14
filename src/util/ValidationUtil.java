@@ -1,4 +1,5 @@
 package util;
+import model.Employee.Status;
 
 public class ValidationUtil {
 
@@ -26,12 +27,16 @@ public class ValidationUtil {
         return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9+_.-]+$");
     }
 
-    public static boolean isValidStatus(String status) {
-        if (status == null || status.trim().isEmpty()) {
+    public static boolean isValidStatus(String statusStr) {
+        if (statusStr == null || statusStr.isBlank()) {
             return false;
         }
-        String cleanStatus = status.trim().toUpperCase();
-        return cleanStatus.equals("ACTIVE") || cleanStatus.equals("INACTIVE");
+        try {
+            Status.valueOf(statusStr.trim().toUpperCase());
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false; // Not a matching enum constant
+        }
     }
 
 }
