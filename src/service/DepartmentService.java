@@ -6,6 +6,7 @@ import model.Department;
 import repository.DepartmentRepository;
 import util.ValidationUtil;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,14 +18,13 @@ public class DepartmentService {
         this.repository = repository;
     }
 
-
     // Display Departments
     public void displayDepartments() {
 
         List<Department> departments = repository.findAll();
 
         if (departments.isEmpty()) {
-            System.out.println("No departments found.");
+            System.out.println("\nNo departments found.");
             return;
         }
 
@@ -34,8 +34,6 @@ public class DepartmentService {
             System.out.println(department);
         }
     }
-
-
 
     // Select Department
     public Department selectDepartment(Scanner sc) {
@@ -62,9 +60,7 @@ public class DepartmentService {
 
                 if (department == null) {
                     throw new DepartmentNotFoundException(
-                            "Department with ID "
-                                    + departmentId
-                                    + " not found."
+                            "Department with ID " + departmentId + " not found."
                     );
                 }
 
@@ -77,11 +73,10 @@ public class DepartmentService {
         }
     }
 
-
     // Add Department
     public void addDepartment(Scanner sc) {
 
-        System.out.print("Enter Department Name: ");
+        System.out.print("\nEnter Department Name: ");
 
         String name = sc.nextLine().trim();
 
@@ -92,7 +87,6 @@ public class DepartmentService {
 
         try {
 
-            // Check duplicate department name
             for (Department department : repository.findAll()) {
 
                 if (department.getName().equalsIgnoreCase(name)) {
@@ -106,19 +100,23 @@ public class DepartmentService {
             Department department = repository.save(name);
 
             System.out.println(
-                    "Department added successfully: "
-                            + department
+                    "Department added successfully: " + department
             );
 
         } catch (DuplicateDepartmentException e) {
 
             System.out.println(e.getMessage());
+
+        } catch (IOException e) {
+
+            System.out.println(
+                    "Failed to save department data: "
+                            + e.getMessage()
+            );
         }
     }
 
-
     // Update Department
-
     public void updateDepartment(Scanner sc) {
 
         displayDepartments();
@@ -139,10 +137,9 @@ public class DepartmentService {
             Department department = repository.findById(id);
 
             if (department == null) {
+
                 throw new DepartmentNotFoundException(
-                        "Department with ID "
-                                + id
-                                + " not found."
+                        "Department with ID " + id + " not found."
                 );
             }
 
@@ -155,15 +152,13 @@ public class DepartmentService {
                 return;
             }
 
-            // Check duplicate name
             for (Department existing : repository.findAll()) {
 
                 if (existing.getId() != id &&
                         existing.getName().equalsIgnoreCase(newName)) {
 
                     throw new DuplicateDepartmentException(
-                            "Department '" + newName
-                                    + "' already exists."
+                            "Department '" + newName + "' already exists."
                     );
                 }
             }
@@ -174,17 +169,24 @@ public class DepartmentService {
                     "Department updated successfully."
             );
 
-        } catch (DepartmentNotFoundException |
-                 DuplicateDepartmentException e) {
+        } catch (DepartmentNotFoundException e) {
 
             System.out.println(e.getMessage());
+
+        } catch (DuplicateDepartmentException e) {
+
+            System.out.println(e.getMessage());
+
+        } catch (IOException e) {
+
+            System.out.println(
+                    "Failed to update department data: "
+                            + e.getMessage()
+            );
         }
     }
 
-
-
     // Delete Department
-
     public void deleteDepartment(Scanner sc) {
 
         displayDepartments();
@@ -207,9 +209,7 @@ public class DepartmentService {
             if (department == null) {
 
                 throw new DepartmentNotFoundException(
-                        "Department with ID "
-                                + id
-                                + " not found."
+                        "Department with ID " + id + " not found."
                 );
             }
 
@@ -224,6 +224,13 @@ public class DepartmentService {
         } catch (DepartmentNotFoundException e) {
 
             System.out.println(e.getMessage());
+
+        } catch (IOException e) {
+
+            System.out.println(
+                    "Failed to delete department data: "
+                            + e.getMessage()
+            );
         }
     }
 }

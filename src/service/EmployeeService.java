@@ -9,6 +9,7 @@ import repository.EmployeeRepository;
 import util.ValidationUtil;
 import model.Employee.Status;
 
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -146,6 +147,8 @@ public class EmployeeService {
             }
             catch (DuplicateEmployeeException e){
                 System.out.println(e.getMessage());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
 
