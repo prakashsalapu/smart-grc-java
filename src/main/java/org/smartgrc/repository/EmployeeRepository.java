@@ -1,138 +1,214 @@
 package org.smartgrc.repository;
 
 import org.smartgrc.model.Employee;
+import org.smartgrc.util.DatabaseConnection;
 
-import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class EmployeeRepository {
 
-    private final HashMap<Integer, Employee> employees = new HashMap<>();
+    public void save(Employee employee) throws SQLException {
 
+        String sql = """
+            INSERT INTO employees
+            (id, name, email, department_id, designation, salary, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """;
 
-    private static final String FILE_PATH="data/employees.txt";
-    public EmployeeRepository(){
-        loadFromFile();
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, employee.getEmpID());
+            statement.setString(2, employee.getEmpName());
+            statement.setString(3, employee.getEmail());
+            statement.setInt(4, employee.getDepartment());
+            statement.setString(5, employee.getDesignation());
+            statement.setDouble(6, employee.getSalary());
+            statement.setString(7, employee.getStatus().name());
+
+            statement.executeUpdate();
+        }
+    }
+    public Employee findById(int id) throws SQLException {
+
+        String sql = """
+                SELECT *
+                FROM employees
+                WHERE id = ?
+                """;
+
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+                    return mapResultSetToEmployee(resultSet);
+                }
+            }
+        }
+
+        return null;
     }
 
+    public Employee deleteById(int id) throws SQLException {
 
-    public void save(Employee employee) throws IOException {
-        employees.put(employee.getEmpID(), employee);
-        saveToFile();
+        Employee employee = findById(id);
+
+        if (employee == null) {
+            return null;
+        }
+
+        String sql = """
+                DELETE FROM employees
+                WHERE id = ?
+                """;
+
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        }
+
+        return employee;
     }
 
-    public Employee findById(int id) {
-        return employees.get(id);
+    public boolean existsById(int id) throws SQLException {
+
+        String sql = """
+                SELECT 1
+                FROM employees
+                WHERE id = ?
+                """;
+
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+        }
     }
 
-    public Employee deleteById(int id) {
-        return employees.remove(id);
+    public boolean isEmpty() throws SQLException {
+        return count() == 0;
     }
 
-    public boolean existsById(int id) {
-        return employees.containsKey(id);
-    }
+    public HashMap<Integer, Employee> findAll() throws SQLException {
 
-    public boolean isEmpty() {
-        return employees.isEmpty();
-    }
+        HashMap<Integer, Employee> employees = new HashMap<>();
 
-    public HashMap<Integer, Employee> findAll() {
+        String sql = "SELECT * FROM employees";
+
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
+
+            while (resultSet.next()) {
+
+                Employee employee =
+                        mapResultSetToEmployee(resultSet);
+
+                employees.put(
+                        employee.getEmpID(),
+                        employee
+                );
+            }
+        }
+
         return employees;
     }
 
-    public int count() {
-        return employees.size();
-    }
+    public int count() throws SQLException {
 
-    // Load Employees Data using File Handling
-    private void loadFromFile() {
+        String sql = "SELECT COUNT(*) FROM employees";
 
-        File file = new File(FILE_PATH);
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()
+        ) {
 
-        // First run: file doesn't exist
-        if (!file.exists()) {
-            return;
-        }
-
-        try (BufferedReader reader =
-                     new BufferedReader(new FileReader(file))) {
-
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-
-                if (line.trim().isEmpty()) {
-                    continue;
-                }
-
-                String[] data = line.split("\\|");
-
-                int empID = Integer.parseInt(data[0]);
-                String name = data[1];
-                String email = data[2];
-                String department = data[3];
-                String designation = data[4];
-                double salary = Double.parseDouble(data[5]);
-                Employee.Status status = Employee.Status.valueOf(data[6]);
-
-                Employee employee = new Employee(
-                        empID,
-                        name,
-                        email,
-                        department,
-                        designation,
-                        salary,
-                        status
-                );
-
-                employees.put(empID, employee);
-            }
-
-        } catch (IOException e) {
-
-            System.out.println(
-                    "Unable to load employee data: "
-                            + e.getMessage()
-            );
-
-        } catch (NumberFormatException e) {
-
-            System.out.println(
-                    "Invalid employee data found in file."
-            );
-        }
-    }
-
-    // Save Employees To File
-    private void saveToFile() throws IOException {
-
-        File file = new File(FILE_PATH);
-
-        // Create data directory if it doesn't exist
-        File parentDirectory = file.getParentFile();
-
-        if (parentDirectory != null && !parentDirectory.exists()) {
-            parentDirectory.mkdirs();
-        }
-
-        try (BufferedWriter writer =
-                     new BufferedWriter(new FileWriter(file))) {
-
-            for (Employee employee : employees.values()) {
-
-                writer.write(
-                        employee.getEmpID() + "|" +
-                                employee.getEmpName() + "|" +
-                                employee.getEmail() + "|" +
-                                employee.getDepartment() + "|" +
-                                employee.getDesignation() + "|" +
-                                employee.getSalary() + "|" +
-                                employee.getStatus()
-                );
-
-                writer.newLine();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
             }
         }
+
+        return 0;
+    }
+
+    public boolean update(Employee employee) throws SQLException {
+
+        String sql = """
+            UPDATE employees
+            SET name = ?,
+                email = ?,
+                department_id = ?,
+                designation = ?,
+                salary = ?,
+                status = ?
+            WHERE id = ?
+            """;
+
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, employee.getEmpName());
+            statement.setString(2, employee.getEmail());
+            statement.setInt(3, employee.getDepartment());
+            statement.setString(4, employee.getDesignation());
+            statement.setDouble(5, employee.getSalary());
+            statement.setString(6, employee.getStatus().name());
+            statement.setInt(7, employee.getEmpID());
+
+            return statement.executeUpdate() > 0;
+        }
+    }
+    private Employee mapResultSetToEmployee(
+            ResultSet resultSet
+    ) throws SQLException {
+
+        Employee.Status status =
+                Employee.Status.valueOf(
+                        resultSet.getString("status")
+                );
+
+        return new Employee(
+                resultSet.getInt("id"),
+                resultSet.getString("name"),
+                resultSet.getString("email"),
+                resultSet.getInt("department_id"),
+                resultSet.getString("designation"),
+                resultSet.getDouble("salary"),
+                status
+        );
     }
 }

@@ -6,7 +6,6 @@ import org.smartgrc.model.Department;
 import org.smartgrc.repository.DepartmentRepository;
 import org.smartgrc.util.ValidationUtil;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
@@ -108,7 +107,7 @@ public class DepartmentService {
 
             System.out.println(e.getMessage());
 
-        } catch (IOException e) {
+        } catch (SQLException e) {
 
             System.out.println(
                     "Failed to save department data: "
@@ -118,7 +117,7 @@ public class DepartmentService {
     }
 
     // Update Department
-    public void updateDepartment(Scanner sc) {
+    public void updateDepartment(Scanner sc) throws SQLException {
 
         displayDepartments();
 
@@ -178,7 +177,7 @@ public class DepartmentService {
 
             System.out.println(e.getMessage());
 
-        } catch (IOException e) {
+        } catch (SQLException e) {
 
             System.out.println(
                     "Failed to update department data: "
@@ -188,7 +187,7 @@ public class DepartmentService {
     }
 
     // Delete Department
-    public void deleteDepartment(Scanner sc) {
+    public void deleteDepartment(Scanner sc) throws SQLException {
 
         displayDepartments();
 
@@ -226,7 +225,7 @@ public class DepartmentService {
 
             System.out.println(e.getMessage());
 
-        } catch (IOException e) {
+        } catch (SQLException e) {
 
             System.out.println(
                     "Failed to delete department data: "

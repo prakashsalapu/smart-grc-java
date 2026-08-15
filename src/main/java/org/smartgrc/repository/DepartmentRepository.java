@@ -16,7 +16,7 @@ public class DepartmentRepository {
 
         List<Department> departments = new ArrayList<>();
 
-        String sql = "SELECT * FROM departments";
+        String sql = "SELECT * FROM departments ORDER BY department_id ASC";
 
         try (
                 Connection connection = DatabaseConnection.getConnection();
@@ -42,7 +42,8 @@ public class DepartmentRepository {
         String sql = """
                 SELECT *
                 FROM departments
-                WHERE id = ?
+                WHERE department_id = ?
+                ORDER BY department_id ASC
                 """;
 
         try (
@@ -105,7 +106,7 @@ public class DepartmentRepository {
         String sql = """
                 UPDATE departments
                 SET name = ?
-                WHERE id = ?
+                WHERE department_id = ?
                 """;
 
         try (
@@ -125,7 +126,7 @@ public class DepartmentRepository {
 
         String sql = """
                 DELETE FROM departments
-                WHERE id = ?
+                WHERE department_id = ?
                 """;
 
         try (
@@ -145,7 +146,7 @@ public class DepartmentRepository {
     ) throws SQLException {
 
         return new Department(
-                resultSet.getInt("id"),
+                resultSet.getInt("department_id"),
                 resultSet.getString("name")
         );
     }

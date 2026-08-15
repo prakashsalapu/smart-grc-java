@@ -1,4 +1,4 @@
-package main.java.model;
+package org.smartgrc.model;
 
 public class Department {
     private int id;

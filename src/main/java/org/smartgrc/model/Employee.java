@@ -10,7 +10,7 @@ public class Employee {
     private final int empID;
     private String empName;
     private String email;
-    private String department;
+    private int department;
     private String designation;
     private double salary;
     private Status status;
@@ -19,7 +19,7 @@ public class Employee {
             int empID,
             String empName,
             String email,
-            String department,
+            int department,
             String designation,
             double salary,
             Status status
@@ -57,12 +57,12 @@ public class Employee {
         }
     }
 
-    public String getDepartment() {
+    public int getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
-        if (department != null && !department.isBlank()) {
+    public void setDepartment(int department) {
+        if (department > 0) {
             this.department = department;
         }
     }

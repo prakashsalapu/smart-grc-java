@@ -9,7 +9,6 @@ import org.smartgrc.repository.EmployeeRepository;
 import org.smartgrc.model.Employee.Status;
 import org.smartgrc.util.ValidationUtil;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -130,7 +129,7 @@ public class EmployeeService {
                         empID,
                         name,
                         email,
-                        department.getName(),
+                        department.getId(),
                         designation,
                         salary,
                         status
@@ -148,7 +147,7 @@ public class EmployeeService {
             }
             catch (DuplicateEmployeeException e){
                 System.out.println(e.getMessage());
-            } catch (IOException e) {
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -157,7 +156,7 @@ public class EmployeeService {
     }
 
     // Display All Employees
-    public void displayAllEmployees() {
+    public void displayAllEmployees() throws SQLException {
 
         if (employeeRepository.isEmpty()) {
             System.out.println("No employees found.");
@@ -172,7 +171,7 @@ public class EmployeeService {
     }
 
     // Search Employee
-    public void searchEmployee(int searchId) {
+    public void searchEmployee(int searchId) throws SQLException {
 
         Employee employee = employeeRepository.findById(searchId);
 
@@ -221,8 +220,15 @@ public class EmployeeService {
                 String name = sc.nextLine();
 
                 if (ValidationUtil.isValidName(name)) {
+
                     employee.setEmpName(name);
-                    System.out.println("Updated.");
+
+                    if (employeeRepository.update(employee)) {
+                        System.out.println("Updated.");
+                    } else {
+                        System.out.println("Employee update failed.");
+                    }
+
                 } else {
                     System.out.println("Invalid Name.");
                 }
@@ -256,7 +262,7 @@ public class EmployeeService {
                 Department department = departmentRepository.findById(deptId);
 
                 if (department != null) {
-                    employee.setDepartment(department.getName());
+                    employee.setDepartment(department.getId());
                     System.out.println("Updated.");
                 } else {
                     System.out.println("Invalid Department.");
@@ -294,10 +300,15 @@ public class EmployeeService {
 
                 if (!ValidationUtil.isValidStatus(statusInput)) {
                     System.out.println("Invalid Status.");
+                    return;
                 }
 
-                // Convert valid String to Enum constant
-                Status status = Status.valueOf(statusInput.trim().toUpperCase());
+                Status status =
+                        Status.valueOf(
+                                statusInput.trim().toUpperCase()
+                        );
+
+                employee.setStatus(status);
             }
 
             default -> System.out.println("Invalid Choice.");
@@ -305,7 +316,7 @@ public class EmployeeService {
     }
 
     // Delete Employee
-    public void deleteEmployee(int targetId) {
+    public void deleteEmployee(int targetId) throws SQLException {
 
         Employee removed = employeeRepository.deleteById(targetId);
 
@@ -317,7 +328,7 @@ public class EmployeeService {
     }
 
     // Total Employees
-    public void totalEmployees() {
+    public void totalEmployees() throws SQLException {
         System.out.println("\nTotal Employees: " + employeeRepository.count());
     }
 }

@@ -1,4 +1,4 @@
-package main.java.exception;
+package org.smartgrc.exception;
 
 public class EmployeeNotFoundException extends Throwable {
 

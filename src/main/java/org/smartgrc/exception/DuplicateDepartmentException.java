@@ -1,4 +1,4 @@
-package main.java.exception;
+package org.smartgrc.exception;
 
 public class DuplicateDepartmentException extends Throwable{
     public DuplicateDepartmentException(String message){

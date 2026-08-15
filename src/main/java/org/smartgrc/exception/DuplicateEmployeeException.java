@@ -1,4 +1,4 @@
-package main.java.exception;
+package org.smartgrc.exception;
 
 public class DuplicateEmployeeException extends Throwable{
     public DuplicateEmployeeException(String message){
