@@ -1,6 +1,6 @@
-package repository;
+package org.smartgrc.repository;
 
-import model.Employee;
+import org.smartgrc.model.Employee;
 
 import java.io.*;
 import java.util.HashMap;

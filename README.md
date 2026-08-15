@@ -4,11 +4,11 @@ Enterprise Governance, Risk & Compliance (GRC) Management System built using Cor
 
 ## Features
 
-- Add model.Employee
+- Add main.java.org.smartgrc.model.Employee
 - Display Employees
-- Search model.Employee
-- Update model.Employee
-- Delete model.Employee
+- Search main.java.org.smartgrc.model.Employee
+- Update main.java.org.smartgrc.model.Employee
+- Delete main.java.org.smartgrc.model.Employee
 
 ## Concepts Used
 

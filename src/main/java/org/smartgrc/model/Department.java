@@ -1,4 +1,4 @@
-package model;
+package main.java.model;
 
 public class Department {
     private int id;

@@ -1,12 +1,13 @@
-package service;
+package org.smartgrc.service;
 
-import exception.DepartmentNotFoundException;
-import exception.DuplicateDepartmentException;
-import model.Department;
-import repository.DepartmentRepository;
-import util.ValidationUtil;
+import org.smartgrc.exception.DepartmentNotFoundException;
+import org.smartgrc.exception.DuplicateDepartmentException;
+import org.smartgrc.model.Department;
+import org.smartgrc.repository.DepartmentRepository;
+import org.smartgrc.util.ValidationUtil;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,7 +20,7 @@ public class DepartmentService {
     }
 
     // Display Departments
-    public void displayDepartments() {
+    public void displayDepartments() throws SQLException {
 
         List<Department> departments = repository.findAll();
 
@@ -36,7 +37,7 @@ public class DepartmentService {
     }
 
     // Select Department
-    public Department selectDepartment(Scanner sc) {
+    public Department selectDepartment(Scanner sc) throws SQLException {
 
         while (true) {
 

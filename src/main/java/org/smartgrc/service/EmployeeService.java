@@ -1,15 +1,16 @@
-package service;
+package org.smartgrc.service;
 
-import exception.DuplicateEmployeeException;
-import exception.EmployeeNotFoundException;
-import model.Department;
-import model.Employee;
-import repository.DepartmentRepository;
-import repository.EmployeeRepository;
-import util.ValidationUtil;
-import model.Employee.Status;
+import org.smartgrc.exception.DuplicateEmployeeException;
+import org.smartgrc.exception.EmployeeNotFoundException;
+import org.smartgrc.model.Department;
+import org.smartgrc.model.Employee;
+import org.smartgrc.repository.DepartmentRepository;
+import org.smartgrc.repository.EmployeeRepository;
+import org.smartgrc.model.Employee.Status;
+import org.smartgrc.util.ValidationUtil;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -25,7 +26,7 @@ public class EmployeeService {
     }
 
     // Add Employees
-    public void addEmployee(Scanner sc)  {
+    public void addEmployee(Scanner sc) throws SQLException {
 
         System.out.print("Enter number of employees to add: ");
 
@@ -188,7 +189,7 @@ public class EmployeeService {
     }
 
     // Update Employee
-    public void updateEmployee(int empID, Scanner sc) {
+    public void updateEmployee(int empID, Scanner sc) throws SQLException {
 
         Employee employee = employeeRepository.findById(empID);
 

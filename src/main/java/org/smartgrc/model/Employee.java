@@ -1,14 +1,12 @@
-package model;
-
+package org.smartgrc.model;
 
 public class Employee {
 
-    public enum Status{
+    public enum Status {
         ACTIVE,
         INACTIVE
     }
 
-    // fields
     private final int empID;
     private String empName;
     private String email;
@@ -17,22 +15,24 @@ public class Employee {
     private double salary;
     private Status status;
 
-
-
-    // constructor
-    public Employee(int empID, String empName, String email, String department, String designation, double salary, Status status){
-
+    public Employee(
+            int empID,
+            String empName,
+            String email,
+            String department,
+            String designation,
+            double salary,
+            Status status
+    ) {
         this.empID = empID;
         setEmpName(empName);
         setEmail(email);
         setDepartment(department);
         setDesignation(designation);
         setSalary(salary);
-        this.status = status;
-
+        setStatus(status);
     }
 
-    // Getter and Setter methods
     public int getEmpID() {
         return empID;
     }
@@ -42,7 +42,7 @@ public class Employee {
     }
 
     public void setEmpName(String empName) {
-        if(empName != null && !empName.isBlank()){
+        if (empName != null && !empName.isBlank()) {
             this.empName = empName;
         }
     }
@@ -52,8 +52,8 @@ public class Employee {
     }
 
     public void setEmail(String email) {
-       if(email != null && email.contains("@")){
-           this.email = email;
+        if (email != null && email.contains("@")) {
+            this.email = email;
         }
     }
 
@@ -62,7 +62,7 @@ public class Employee {
     }
 
     public void setDepartment(String department) {
-        if(department != null && !department.isBlank()){
+        if (department != null && !department.isBlank()) {
             this.department = department;
         }
     }
@@ -72,7 +72,7 @@ public class Employee {
     }
 
     public void setDesignation(String designation) {
-        if(designation != null && !designation.isBlank()){
+        if (designation != null && !designation.isBlank()) {
             this.designation = designation;
         }
     }
@@ -82,28 +82,27 @@ public class Employee {
     }
 
     public void setSalary(double salary) {
-        if(salary > 0){
+        if (salary > 0) {
             this.salary = salary;
         }
     }
 
-    // Getter for Status
     public Status getStatus() {
         return status;
     }
 
-    // Setter for Status
     public void setStatus(Status status) {
         this.status = status;
     }
 
-
-
-    // Override method to display Object fields
     @Override
-    public String toString(){
-        return "\nEmployee ID: " + empID + "\nName: " + empName + "\nEmail: " + email + "\nDepartment: " + department + "\nDesignation: " + designation +
-                "\nSalary: " + salary + "\nStatus: " + status;
+    public String toString() {
+        return "\nEmployee ID: " + empID +
+                "\nName: " + empName +
+                "\nEmail: " + email +
+                "\nDepartment: " + department +
+                "\nDesignation: " + designation +
+                "\nSalary: " + salary +
+                "\nStatus: " + status;
     }
-
 }
