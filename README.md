@@ -1,44 +1,66 @@
-# Employee Management Java
+## Employee Management System
 
-Enterprise Governance, Risk & Compliance (GRC) Management System built using Core Java.
+A console-based Employee Management System built using Java, MySQL, JDBC, and Maven.
 
-## Features
+The project focuses on applying Core Java and OOP concepts while implementing database-backed employee and department management.
 
-- Add main.java.org.employeeManagement.model.Employee
-- Display Employees
-- Search main.java.org.employeeManagement.model.Employee
-- Update main.java.org.employeeManagement.model.Employee
-- Delete main.java.org.employeeManagement.model.Employee
+### Features
 
-## Concepts Used
+- Add, display, search, update, and delete employees
+- Add, display, update, and delete departments
+- Employee status management using Enum
+- Input validation
+- MySQL database persistence
+- JDBC-based CRUD operations
 
-- Object-Oriented Programming
+### Concepts Used
+
+- OOP
 - Encapsulation
-- Constructors
-- Collections (ArrayList)
-- CRUD Operations
-- Method Overriding
-- Validation
-- Clean Code Principles
-
-## Tech Stack
-
-- Java
-- IntelliJ IDEA
-- Git
-- GitHub
-
-## Upcoming Features
-
+- Abstraction
+- Polymorphism
+- Interfaces
+- Collections
 - Exception Handling
-- File Handling
-- Packages
+- Enums
 - JDBC
-- Oracle SQL
-- PL/SQL
-- Spring Boot
-- REST APIs
+- SQL
+- CRUD Operations
+- Layered Architecture
 
-## Learning Objectives
+### Tech Stack
 
-This project is being developed incrementally to learn Java backend development by applying OOP concepts in a real-world enterprise application.
+- Java 21
+- MySQL
+- JDBC
+- Maven
+- IntelliJ IDEA
+- Git & GitHub
+
+### Architecture
+
+```text
+Main
+  ↓
+Service
+  ↓
+Repository
+  ↓
+JDBC
+  ↓
+MySQL
+```
+Project Structure
+```
+src/main/java/org/employeeManagement
+│
+├── model
+├── repository
+├── service
+├── exception
+└── util
+```
+
+### Learning Objective
+
+This project is built to strengthen Java backend fundamentals by combining Core Java, OOP, SQL, JDBC, and database-driven application development.
