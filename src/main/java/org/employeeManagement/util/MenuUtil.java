@@ -1,13 +1,13 @@
-package org.smartgrc.util;
+package org.employeeManagement.util;
 
-public class DepartmentUtil {
+public class MenuUtil {
 
     public static void displayMenu() {
 
         System.out.println("""
             
             ==================================================
-                     SMART GRC MANAGEMENT SYSTEM
+                    SMART GRC MANAGEMENT SYSTEM
             ==================================================
             
             EMPLOYEE MANAGEMENT
@@ -17,12 +17,12 @@ public class DepartmentUtil {
             3. Search Employee
             4. Update Employee
             5. Delete Employee
-            6. Employee Statistics
+            6. Total Employees
             
             DEPARTMENT MANAGEMENT
             ---------------------
-            7. Add Department
-            8. Display Departments
+            7. Display Departments
+            8. Add Department
             9. Update Department
             10. Delete Department
             

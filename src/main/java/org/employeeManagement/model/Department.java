@@ -1,4 +1,4 @@
-package org.smartgrc.model;
+package org.employeeManagement.model;
 
 public class Department {
     private int id;

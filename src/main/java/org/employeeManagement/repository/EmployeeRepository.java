@@ -1,7 +1,7 @@
-package org.smartgrc.repository;
+package org.employeeManagement.repository;
 
-import org.smartgrc.model.Employee;
-import org.smartgrc.util.DatabaseConnection;
+import org.employeeManagement.model.Employee;
+import org.employeeManagement.util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

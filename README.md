@@ -1,14 +1,14 @@
-# SmartGRC Java
+# Employee Management Java
 
 Enterprise Governance, Risk & Compliance (GRC) Management System built using Core Java.
 
 ## Features
 
-- Add main.java.org.smartgrc.model.Employee
+- Add main.java.org.employeeManagement.model.Employee
 - Display Employees
-- Search main.java.org.smartgrc.model.Employee
-- Update main.java.org.smartgrc.model.Employee
-- Delete main.java.org.smartgrc.model.Employee
+- Search main.java.org.employeeManagement.model.Employee
+- Update main.java.org.employeeManagement.model.Employee
+- Delete main.java.org.employeeManagement.model.Employee
 
 ## Concepts Used
 

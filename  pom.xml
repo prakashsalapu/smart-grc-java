@@ -6,8 +6,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.smartgrc</groupId>
-    <artifactId>smart-grc</artifactId>
+    <groupId>org.employeeManagement</groupId>
+    <artifactId>employeeManagement-java</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

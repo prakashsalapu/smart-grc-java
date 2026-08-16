@@ -1,5 +1,5 @@
-package org.smartgrc.util;
-import org.smartgrc.model.Employee.Status;
+package org.employeeManagement.util;
+import org.employeeManagement.model.Employee.Status;
 
 public class ValidationUtil {
 

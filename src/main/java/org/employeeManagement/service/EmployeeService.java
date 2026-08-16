@@ -1,13 +1,13 @@
-package org.smartgrc.service;
+package org.employeeManagement.service;
 
-import org.smartgrc.exception.DuplicateEmployeeException;
-import org.smartgrc.exception.EmployeeNotFoundException;
-import org.smartgrc.model.Department;
-import org.smartgrc.model.Employee;
-import org.smartgrc.repository.DepartmentRepository;
-import org.smartgrc.repository.EmployeeRepository;
-import org.smartgrc.model.Employee.Status;
-import org.smartgrc.util.ValidationUtil;
+import org.employeeManagement.exception.DuplicateEmployeeException;
+import org.employeeManagement.exception.EmployeeNotFoundException;
+import org.employeeManagement.model.Department;
+import org.employeeManagement.model.Employee;
+import org.employeeManagement.repository.DepartmentRepository;
+import org.employeeManagement.repository.EmployeeRepository;
+import org.employeeManagement.model.Employee.Status;
+import org.employeeManagement.util.ValidationUtil;
 
 import java.sql.SQLException;
 import java.util.InputMismatchException;

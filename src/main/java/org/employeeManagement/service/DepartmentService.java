@@ -1,10 +1,10 @@
-package org.smartgrc.service;
+package org.employeeManagement.service;
 
-import org.smartgrc.exception.DepartmentNotFoundException;
-import org.smartgrc.exception.DuplicateDepartmentException;
-import org.smartgrc.model.Department;
-import org.smartgrc.repository.DepartmentRepository;
-import org.smartgrc.util.ValidationUtil;
+import org.employeeManagement.exception.DepartmentNotFoundException;
+import org.employeeManagement.exception.DuplicateDepartmentException;
+import org.employeeManagement.model.Department;
+import org.employeeManagement.repository.DepartmentRepository;
+import org.employeeManagement.util.ValidationUtil;
 
 import java.sql.SQLException;
 import java.util.List;

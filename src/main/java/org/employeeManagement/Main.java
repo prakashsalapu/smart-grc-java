@@ -1,16 +1,16 @@
-package org.smartgrc;
+package org.employeeManagement;
 
-import org.smartgrc.exception.DuplicateEmployeeException;
-import org.smartgrc.exception.EmployeeNotFoundException;
-import org.smartgrc.repository.DepartmentRepository;
-import org.smartgrc.repository.EmployeeRepository;
-import org.smartgrc.service.DepartmentService;
-import org.smartgrc.service.EmployeeService;
+import org.employeeManagement.exception.DuplicateEmployeeException;
+import org.employeeManagement.exception.EmployeeNotFoundException;
+import org.employeeManagement.repository.DepartmentRepository;
+import org.employeeManagement.repository.EmployeeRepository;
+import org.employeeManagement.service.DepartmentService;
+import org.employeeManagement.service.EmployeeService;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import static org.smartgrc.util.MenuUtil.displayMenu;
+import static org.employeeManagement.util.MenuUtil.displayMenu;
 
 public class Main {
 
@@ -100,7 +100,7 @@ public class Main {
                     System.out.println("""
                             
                             ========================================
-                                 Thank you for using SmartGRC!
+                                 Thank you for using..!
                             ========================================
                             Application closed successfully.
                             """);
